@@ -9,6 +9,7 @@ Data on the ride history was provided in a document contained within the certifi
 ## Union data into a single table for querying.
 
 To work with the entire dataset as one table, I unioned each of the files togther and saved a table with the output.
+
 CREATE TABLE Cycling_Data.swag AS Full_Year_Table
 (SELECT *
 FROM `cycling-case-study-362219.Cycling_Data.April_2022`
