@@ -1,4 +1,4 @@
 # Jeremy_rep
 cd Documents 
 mkdir portfolios
-cd portfolios
+cd Portfolio
