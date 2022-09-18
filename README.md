@@ -8,43 +8,11 @@ Data on the ride history was provided in a document contained within the certifi
 
 ## Union data into a single table for querying.
 
-To work with the entire dataset as one table, I unioned each of the files togther. 
-
-  SELECT *
-  
-  FROM `cycling-case-study-362219.Cycling_Data.April_2022`
-  
-  UNION ALL
-  
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.August_2022`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.Dec_2021`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.Feb_2022`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.Jan_2022`
-  UNION ALL 
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.July_2022`
-  UNION ALL 
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.June_2022`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.March_2022`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.May_2022`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.Nov_2021`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.Oct_2021`
-  UNION ALL
-  SELECT *
-  FROM `cycling-case-study-362219.Cycling_Data.Sep_2021`
+To work with the entire dataset as one table, I unioned each of the files togther and saved a table with the output.
+CREATE TABLE Cycling_Data.swag AS Full_Year_Table
+(SELECT *
+FROM `cycling-case-study-362219.Cycling_Data.April_2022`
+UNION ALL 
+SELECT *
+FROM `cycling-case-study-362219.Cycling_Data.August_2022`
+And so on until all filles had been unioned into one file).
