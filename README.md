@@ -89,5 +89,5 @@ ggplot(pivoted_cycle_data,mapping = aes(Average_Temp,member_rides_fraction)) +
 
 While corrilation does not neccesarilly mean causation, it is indisputably true the higher during the warmer months the percentage of total rides being taken by members decreases. Considering that it is the stated goal of this company to convert casual riders into members, they should consider doing something during the summer months or in the late spring to incentivize their customers to sign up for a membership. Perhaps a discount on the membership or an offer where the first month is free so long as they sign up for a year. 
 
-
+file:///Users/jeremyhandy/Temp-Impact-on-Riding-Type.html
   
