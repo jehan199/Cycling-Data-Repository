@@ -19,11 +19,14 @@ SELECT *
 FROM `cycling-case-study-362219.Cycling_Data.August_2022`
 And so on until all filles had been unioned into one file).
 ```
-## Swag
+# Write SQL scripts to format data for further analysis in R
 
+## Formating data for assessing the link between riding paterns and temperature 
+
+For this query I sourced data from NOAA's database of historical weather. I grouped the cycling data by date and then pulled in the daily high/low and then averaged the temperature for each date. 
 
 ```
----CREATE TABLE Cycling_Data.perm_tbl_for_transpose AS 
+CREATE TABLE Cycling_Data.perm_tbl_for_transpose AS 
 (WITH date_breakdown AS 
 (SELECT 
   EXTRACT(DATE FROM started_at)AS full_date,
@@ -37,3 +40,54 @@ LEFT JOIN`cycling-case-study-362219.Cycling_Data.Weather_Data` AS Weather
 ON full_year.full_date = weather.date
 GROUP BY full_date, member_casual)
 ```
+I then used a second query to pivot the member_casual column to put my data in a format that would be suitable for ploting in R.
+
+```
+WITH near_finish AS(SELECT *
+FROM 
+(SELECT
+  member_casual,
+  full_date,
+  count_of_rides,
+  Average_Temp,
+FROM
+  `cycling-case-study-362219.Cycling_Data.perm_tbl_for_transpose`)
+PIVOT
+(SUM(count_of_rides) AS rides
+FOR member_casual IN ('casual', 'member')))
+SELECT *, (rides_member/(rides_casual+rides_member)) AS members_rides_over_total_rides
+FROM near_finish
+```
+
+## Analyze the query results in R
+
+The output of the second query results in there being 5 columns: full_date,	Average_Temp,	rides_casual,	rides_member,	members_rides_over_total_rides
+From these columns I can then run a cor.test to see if higher temperates are corrilated with a lower porportion of total rides being rides taken by members.
+
+```
+cor.test(pivoted_cycle_data$Average_Temp,pivoted_cycle_data$member_rides_fraction, method = "pearson")
+```
+The output is as follows: 
+t = -25.018, df = 363, p-value < 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.8304023 -0.7545358
+sample estimates:
+       cor 
+-0.7955669
+
+This seems to suggest that higher temperatures are in fact corrilated to a lower porportion of total rides being rides taken by members.
+A quick plot of this also shows the same relationship.
+```
+ggplot(pivoted_cycle_data,mapping = aes(Average_Temp,member_rides_fraction)) +
+  geom_point()+
+  geom_smooth()+
+  labs(title = 'Temperature Impact on Riding Type',x = 'Average Temperature (F)',y = 'Member Rides/Total Rides') +
+  theme(plot.title = element_text(hjust = 0.5))  
+```
+## Takeaway + link to R markdown HTML for visualization
+
+While corrilation does not neccesarilly mean causation, it is indisputably true the higher during the warmer months the percentage of total rides being taken by members decreases. Considering that it is the stated goal of this company to convert casual riders into members, they should consider doing something during the summer months or in the late spring to incentivize their customers to sign up for a membership. Perhaps a discount on the membership or an offer where the first month is free so long as they sign up for a year. 
+
+
+  
